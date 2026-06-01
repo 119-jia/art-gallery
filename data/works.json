@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "title": "《综绘印象》",
+    "student": "张三",
+    "class": "2022级美术学1班",
+    "medium": "综合材料",
+    "materials": "丙烯、沙粒、宣纸",
+    "description": "以自然肌理为灵感，通过材料叠加与组合探索综合材料的视觉表现力。",
+    "date": "2026-03",
+    "image": "images/placeholder.jpg",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "title": "《时间的褶皱》",
+    "student": "李四",
+    "class": "2022级美术学1班",
+    "medium": "拼贴·综合",
+    "materials": "旧报纸、麻布、乳胶",
+    "description": "运用旧报纸与麻布的拼接组合，表达时间沉淀后的质感与温度。",
+    "date": "2026-03",
+    "image": "images/placeholder.jpg",
+    "featured": true
+  },
+  {
+    "id": 3,
+    "title": "《大地之痕》",
+    "student": "王五",
+    "class": "2022级美术学2班",
+    "medium": "综合材料",
+    "materials": "泥土、矿物颜料、木板",
+    "description": "采集自然泥土为材料，以大地纹理为语言构建抽象的画面叙事。",
+    "date": "2026-04",
+    "image": "images/placeholder.jpg",
+    "featured": false
+  },
+  {
+    "id": 4,
+    "title": "《弦外之音》",
+    "student": "赵六",
+    "class": "2022级美术学2班",
+    "medium": "装置·综合",
+    "materials": "铁丝、棉线、丙烯",
+    "description": "以线性材料在空间中交织，探索平面与立体的边界关系。",
+    "date": "2026-04",
+    "image": "images/placeholder.jpg",
+    "featured": false
+  },
+  {
+    "id": 5,
+    "title": "《纸的叙事》",
+    "student": "陈七",
+    "class": "2023级美术学1班",
+    "medium": "纸艺·综合",
+    "materials": "手工纸、墨水、植物纤维",
+    "description": "以不同质感的纸张为载体，通过撕、揉、染等手法重塑纸的表现可能。",
+    "date": "2026-03",
+    "image": "images/placeholder.jpg",
+    "featured": true
+  },
+  {
+    "id": 6,
+    "title": "《光影残片》",
+    "student": "刘八",
+    "class": "2023级美术学1班",
+    "medium": "综合材料",
+    "materials": "亚克力板、树脂、色粉",
+    "description": "利用透明材料的透光特性，捕捉光线在材质内部游走的瞬间美感。",
+    "date": "2026-04",
+    "image": "images/placeholder.jpg",
+    "featured": false
+  },
+  {
+    "id": 7,
+    "title": "《锈蚀记忆》",
+    "student": "孙九",
+    "class": "2022级美术学1班",
+    "medium": "金属·综合",
+    "materials": "铁片、铜丝、锈蚀剂",
+    "description": "利用金属的自然氧化过程，记录时间在材料表面留下的痕迹。",
+    "date": "2026-05",
+    "image": "images/placeholder.jpg",
+    "featured": false
+  },
+  {
+    "id": 8,
+    "title": "《织物诗篇》",
+    "student": "周十",
+    "class": "2023级美术学2班",
+    "medium": "纤维·综合",
+    "materials": "棉麻布料、刺绣线、蜡染",
+    "description": "将传统纺织工艺与当代综合材料结合，织造出富有诗意的视觉语言。",
+    "date": "2026-05",
+    "image": "images/placeholder.jpg",
+    "featured": true
+  }
+]
