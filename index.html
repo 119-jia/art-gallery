@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="天水师范大学美术学院 · 综合材料技法与创作课程学生作品线上展">
+  <title>综合材料技法与创作 · 学生作品展</title>
+
+  <!-- 字体 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="hero">
+      <p class="hero-subtitle">TIANSHUI NORMAL UNIVERSITY · FINE ARTS</p>
+      <h1 class="hero-title">综合材料技法与创作<br><em>学生作品线上展</em></h1>
+      <p class="hero-desc">
+        本课程旨在探索综合材料在当代艺术创作中的表现语言，<br>
+        引导学生突破传统媒介边界，发掘材料的叙事潜能。
+      </p>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number" id="stat-total">—</div>
+        <div class="stat-label">作品总数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="stat-mediums">—</div>
+        <div class="stat-label">材料种类</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="stat-classes">—</div>
+        <div class="stat-label">班级数量</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="main-nav">
+    <div class="nav-inner">
+      <div class="nav-brand">天水师范大学 <span>· 美术学院</span></div>
+    </div>
+  </nav>
+
+  <!-- ===== Filter ===== -->
+  <section class="filter-section">
+    <div class="filter-inner">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="搜索作品名称、作者、材料..." autocomplete="off">
+      </div>
+      <div class="filter-tags">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="featured">精选作品</button>
+        <button class="filter-btn" data-filter="综合材料">综合材料</button>
+        <button class="filter-btn" data-filter="拼贴·综合">拼贴·综合</button>
+        <button class="filter-btn" data-filter="装置·综合">装置·综合</button>
+        <button class="filter-btn" data-filter="纸艺·综合">纸艺·综合</button>
+        <button class="filter-btn" data-filter="金属·综合">金属·综合</button>
+        <button class="filter-btn" data-filter="纤维·综合">纤维·综合</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Gallery ===== -->
+  <main class="gallery-section">
+    <div class="gallery-header">
+      <div class="gallery-count" id="result-count">加载中...</div>
+      <div class="sort-btns">
+        <button class="sort-btn active" data-sort="default">默认</button>
+        <button class="sort-btn" data-sort="name">按名称</button>
+        <button class="sort-btn" data-sort="date">按时间</button>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid" id="gallery-grid">
+      <!-- Cards rendered by JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="empty-icon">🔍</div>
+      <p>没有找到匹配的作品<br><span style="font-size:0.85rem;opacity:0.6">试试调整搜索条件或筛选分类</span></p>
+    </div>
+  </main>
+
+  <!-- ===== Lightbox ===== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-label="作品详情">
+    <button class="lightbox-close" id="lb-close" aria-label="关闭">✕</button>
+    <div class="lightbox-content">
+      <div class="lightbox-image">
+        <img id="lb-image" src="" alt="">
+      </div>
+      <div class="lightbox-info">
+        <h2 class="lb-title" id="lb-title"></h2>
+        <p class="lb-student" id="lb-student"></p>
+        <div class="lb-meta" id="lb-meta"></div>
+        <p class="lb-desc" id="lb-desc"></p>
+        <div class="lightbox-nav">
+          <button class="lb-nav-btn disabled" id="lb-prev">← 上一件</button>
+          <button class="lb-nav-btn disabled" id="lb-next">下一件 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <p>
+      <strong>天水师范大学美术学院</strong> · 综合材料技法与创作课程<br>
+      指导教师：XXX · 2025—2026 学年
+    </p>
+  </footer>
+
+  <!-- ===== Script ===== -->
+  <script src="js/script.js"></script>
+
+</body>
+</html>
