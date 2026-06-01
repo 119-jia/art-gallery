@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 · 学生作品展</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { background: #f5f0eb; }
+        .admin-container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .admin-header h1 { font-size: 24px; color: #2c2c2c; margin: 0; }
+        .admin-header .back-link { color: #8b5e3c; text-decoration: none; font-size: 14px; }
+        .admin-header .back-link:hover { text-decoration: underline; }
+        
+        .form-section { background: #fff; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .form-section h2 { font-size: 18px; color: #2c2c2c; margin: 0 0 20px 0; padding-bottom: 12px; border-bottom: 1px solid #eee; }
+        
+        .form-row { margin-bottom: 16px; }
+        .form-row label { display: block; font-size: 14px; color: #555; margin-bottom: 6px; font-weight: 500; }
+        .form-row input, .form-row textarea, .form-row select { 
+            width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 14px; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;
+        }
+        .form-row input:focus, .form-row textarea:focus { outline: none; border-color: #8b5e3c; }
+        .form-row textarea { height: 80px; resize: vertical; }
+        .form-row .hint { font-size: 12px; color: #999; margin-top: 4px; }
+        
+        .form-row-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        
+        .btn { 
+            padding: 10px 28px; border: none; border-radius: 8px; font-size: 15px; 
+            cursor: pointer; transition: all 0.2s; font-weight: 500;
+        }
+        .btn-primary { background: #8b5e3c; color: #fff; }
+        .btn-primary:hover { background: #6f4a2e; }
+        .btn-secondary { background: #e8e0d8; color: #555; }
+        .btn-secondary:hover { background: #ddd5cb; }
+        .btn-danger { background: #e74c3c; color: #fff; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-success { background: #27ae60; color: #fff; }
+        .btn-success:hover { background: #1e8449; }
+        
+        .btn-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+        
+        /* 作品列表 */
+        .work-list { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .work-item { 
+            display: flex; align-items: center; padding: 16px 20px; border-bottom: 1px solid #f0f0f0;
+            gap: 16px; transition: background 0.2s;
+        }
+        .work-item:hover { background: #faf8f5; }
+        .work-item:last-child { border-bottom: none; }
+        .work-thumb { width: 50px; height: 50px; border-radius: 6px; background: #f0ebe5; flex-shrink: 0; overflow: hidden; }
+        .work-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .work-info { flex: 1; min-width: 0; }
+        .work-info .title { font-size: 15px; font-weight: 600; color: #2c2c2c; }
+        .work-info .meta { font-size: 13px; color: #888; margin-top: 2px; }
+        .work-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .work-actions button { 
+            padding: 6px 14px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-edit { background: #e8e0d8; color: #555; }
+        .btn-edit:hover { background: #ddd5cb; }
+        .btn-del { background: #fde8e6; color: #c0392b; }
+        .btn-del:hover { background: #f5d0cc; }
+        .move-btn { background: none; border: 1px solid #ddd !important; color: #888; padding: 6px 10px !important; }
+        .move-btn:hover { background: #f5f0eb; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
+        .empty-state p { font-size: 16px; margin: 0; }
+
+        /* 导出区域 */
+        .export-section { margin-top: 30px; }
+        .export-section textarea { 
+            width: 100%; height: 200px; font-family: 'Courier New', monospace; font-size: 13px;
+            padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+            margin-top: 10px;
+        }
+        .export-notice { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 14px; color: #795548; line-height: 1.6; }
+
+        /* 图片预览 */
+        .image-preview { margin-top: 8px; max-width: 200px; border-radius: 6px; overflow: hidden; display: none; }
+        .image-preview img { width: 100%; height: auto; display: block; }
+        .image-preview.show { display: block; }
+
+        /* Toast 提示 */
+        .toast { 
+            position: fixed; top: 20px; right: 20px; padding: 14px 24px; border-radius: 8px;
+            color: #fff; font-size: 14px; z-index: 9999; opacity: 0; transform: translateY(-20px);
+            transition: all 0.3s; box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #27ae60; }
+        .toast.error { background: #e74c3c; }
+
+        @media (max-width: 600px) {
+            .form-row-inline { grid-template-columns: 1fr; }
+            .work-item { flex-wrap: wrap; }
+            .work-actions { width: 100%; justify-content: flex-end; }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>📋 作品管理后台</h1>
+            <a href="index.html" class="back-link">← 返回展厅</a>
+        </div>
+
+        <!-- 添加/编辑表单 -->
+        <div class="form-section" id="formSection">
+            <h2 id="formTitle">➕ 添加新作品</h2>
+            
+            <div class="form-row">
+                <label for="workId">编号（自动生成，留空即可）</label>
+                <input type="text" id="workId" placeholder="自动生成，无需填写" readonly style="background:#f8f8f8;color:#999;">
+            </div>
+
+            <div class="form-row-inline">
+                <div class="form-row">
+                    <label for="workTitle">作品名称 *</label>
+                    <input type="text" id="workTitle" placeholder="如：融">
+                </div>
+                <div class="form-row">
+                    <label for="workArtist">作者姓名 *</label>
+                    <input type="text" id="workArtist" placeholder="如：孙佳佳">
+                </div>
+            </div>
+
+            <div class="form-row-inline">
+                <div class="form-row">
+                    <label for="workCategory">材料类别 *</label>
+                    <select id="workCategory">
+                        <option value="">请选择</option>
+                        <option value="综合材料">综合材料</option>
+                        <option value="油画">油画</option>
+                        <option value="水彩">水彩</option>
+                        <option value="版画">版画</option>
+                        <option value="素描">素描</option>
+                        <option value="国画">国画</option>
+                        <option value="雕塑">雕塑</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="workYear">创作年代</label>
+                    <input type="text" id="workYear" placeholder="如：2026">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label for="workMaterial">材料描述</label>
+                <input type="text" id="workMaterial" placeholder="如：纸本综合材料，60×80cm">
+            </div>
+
+            <div class="form-row">
+                <label for="workDesc">作品描述</label>
+                <textarea id="workDesc" placeholder="简要描述作品的创作理念或灵感（选填）"></textarea>
+            </div>
+
+            <div class="form-row">
+                <label for="workImage">图片文件名</label>
+                <input type="text" id="workImage" placeholder="如：1.jpg（放在 images 文件夹里的图片文件名）">
+                <div class="hint">📌 先把学生作品图片放入 <code>images/</code> 文件夹，然后在这里输入文件名</div>
+                <div class="image-preview" id="imagePreview"><img src="" alt="预览"></div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="saveWork()">💾 保存作品</button>
+                <button class="btn btn-secondary" onclick="resetForm()">↺ 重置</button>
+            </div>
+        </div>
+
+        <!-- 作品列表 -->
+        <div class="work-list" id="workListContainer">
+            <div style="padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;">
+                <strong>📚 作品列表 (<span id="workCount">0</span>)</strong>
+                <div>
+                    <button class="btn btn-success" onclick="exportAndUpload()" style="padding:8px 18px;font-size:13px;">📤 导出 JSON</button>
+                </div>
+            </div>
+            <div id="workList">
+                <div class="empty-state"><p>还没有作品，在上方表单中添加吧 ✨</p></div>
+            </div>
+        </div>
+
+        <!-- 导出区域 -->
+        <div class="export-section form-section" id="exportSection" style="display:none;">
+            <h2>📤 导出 JSON（复制以下内容）</h2>
+            <p style="font-size:14px;color:#666;">把下面的代码全部复制，然后去 GitHub 替换掉 <code>data/works.json</code> 的内容。</p>
+            <textarea id="exportJson" readonly onclick="this.select()"></textarea>
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="copyJson()">📋 复制到剪贴板</button>
+            </div>
+            <div class="export-notice">
+                <strong>📝 如何更新到网站上：</strong><br>
+                1. 打开 GitHub → <code>119-jia/art-gallery</code> 仓库<br>
+                2. 点击 <code>data/works.json</code> 文件<br>
+                3. 点击右侧的 ✏️ 编辑按钮<br>
+                4. 全选并粘贴上面复制的内容<br>
+                5. 向下滚动点击 <strong>Commit changes</strong>（提交更改）<br>
+                6. 等1分钟刷新网站就能看到更新了！
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============ 数据 ============
+        let works = [];
+        let editingId = null;
+
+        // 默认图片
+        const PLACEHOLDER_SVG = 'data:image/svg+xml,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">' +
+            '<rect width="200" height="200" fill="#f0ebe5"/>' +
+            '<text x="100" y="110" text-anchor="middle" fill="#bbb" font-size="48">🎨</text>' +
+            '</svg>'
+        );
+
+        // ============ 本地存储 ============
+        function loadWorks() {
+            const saved = localStorage.getItem('art_gallery_works');
+            if (saved) {
+                try { works = JSON.parse(saved); } catch(e) { works = []; }
+            }
+        }
+
+        function saveWorks() {
+            localStorage.setItem('art_gallery_works', JSON.stringify(works));
+            renderList();
+            document.getElementById('workCount').textContent = works.length;
+        }
+
+        // ============ 渲染列表 ============
+        function renderList() {
+            const container = document.getElementById('workList');
+            if (works.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>还没有作品，在上方表单中添加吧 ✨</p></div>';
+                return;
+            }
+
+            container.innerHTML = works.map((w, i) => `
+                <div class="work-item">
+                    <div class="work-thumb">
+                        <img src="${w.image ? 'images/' + w.image : PLACEHOLDER_SVG}" 
+                             onerror="this.src='${PLACEHOLDER_SVG}'"
+                             alt="${w.title}">
+                    </div>
+                    <div class="work-info">
+                        <div class="title">${escapeHtml(w.title)}</div>
+                        <div class="meta">${escapeHtml(w.artist)} · ${escapeHtml(w.category)}${w.year ? ' · ' + escapeHtml(w.year) : ''}</div>
+                    </div>
+                    <div class="work-actions">
+                        <button class="move-btn" onclick="moveWork(${i}, -1)" ${i === 0 ? 'disabled style="opacity:0.3"' : ''} title="上移">↑</button>
+                        <button class="move-btn" onclick="moveWork(${i}, 1)" ${i === works.length-1 ? 'disabled style="opacity:0.3"' : ''} title="下移">↓</button>
+                        <button class="btn-edit" onclick="editWork(${i})">编辑</button>
+                        <button class="btn-del" onclick="deleteWork(${i})">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        // ============ 表单操作 ============
+        function resetForm() {
+            document.getElementById('formTitle').textContent = '➕ 添加新作品';
+            document.getElementById('workId').value = '';
+            document.getElementById('workTitle').value = '';
+            document.getElementById('workArtist').value = '';
+            document.getElementById('workCategory').value = '';
+            document.getElementById('workYear').value = '';
+            document.getElementById('workMaterial').value = '';
+            document.getElementById('workDesc').value = '';
+            document.getElementById('workImage').value = '';
+            document.getElementById('imagePreview').classList.remove('show');
+            editingId = null;
+        }
+
+        function getFormData() {
+            return {
+                id: document.getElementById('workId').value || 'work_' + Date.now(),
+                title: document.getElementById('workTitle').value.trim(),
+                artist: document.getElementById('workArtist').value.trim(),
+                category: document.getElementById('workCategory').value,
+                year: document.getElementById('workYear').value.trim(),
+                material: document.getElementById('workMaterial').value.trim(),
+                description: document.getElementById('workDesc').value.trim(),
+                image: document.getElementById('workImage').value.trim()
+            };
+        }
+
+        function validateForm(data) {
+            if (!data.title) { showToast('请填写作品名称', 'error'); return false; }
+            if (!data.artist) { showToast('请填写作者姓名', 'error'); return false; }
+            if (!data.category) { showToast('请选择材料类别', 'error'); return false; }
+            return true;
+        }
+
+        function fillForm(data) {
+            document.getElementById('workId').value = data.id || '';
+            document.getElementById('workTitle').value = data.title || '';
+            document.getElementById('workArtist').value = data.artist || '';
+            document.getElementById('workCategory').value = data.category || '';
+            document.getElementById('workYear').value = data.year || '';
+            document.getElementById('workMaterial').value = data.material || '';
+            document.getElementById('workDesc').value = data.description || '';
+            document.getElementById('workImage').value = data.image || '';
+            if (data.image) {
+                const preview = document.getElementById('imagePreview');
+                preview.querySelector('img').src = 'images/' + data.image;
+                preview.classList.add('show');
+            }
+        }
+
+        function saveWork() {
+            const data = getFormData();
+            if (!validateForm(data)) return;
+
+            if (editingId !== null) {
+                // 编辑模式
+                const idx = works.findIndex(w => w.id === editingId);
+                if (idx !== -1) {
+                    works[idx] = data;
+                    showToast('✅ 已更新：' + data.title, 'success');
+                }
+            } else {
+                // 添加模式
+                works.push(data);
+                showToast('✅ 已添加：' + data.title, 'success');
+            }
+
+            saveWorks();
+            resetForm();
+        }
+
+        function editWork(index) {
+            const data = works[index];
+            fillForm(data);
+            editingId = data.id;
+            document.getElementById('formTitle').textContent = '✏️ 编辑作品';
+            document.getElementById('workId').value = data.id;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteWork(index) {
+            const title = works[index].title;
+            if (!confirm('确定要删除「' + title + '」吗？')) return;
+            works.splice(index, 1);
+            saveWorks();
+            if (editingId === null) resetForm();
+            showToast('🗑️ 已删除：' + title, 'success');
+        }
+
+        function moveWork(index, direction) {
+            const target = index + direction;
+            if (target < 0 || target >= works.length) return;
+            [works[index], works[target]] = [works[target], works[index]];
+            saveWorks();
+        }
+
+        // ============ 图片预览 ============
+        document.getElementById('workImage').addEventListener('input', function() {
+            const preview = document.getElementById('imagePreview');
+            const img = preview.querySelector('img');
+            if (this.value.trim()) {
+                img.src = 'images/' + this.value.trim();
+                preview.classList.add('show');
+            } else {
+                preview.classList.remove('show');
+            }
+        });
+
+        // ============ 导出 ============
+        function exportJson() {
+            return JSON.stringify({ works: works }, null, 2);
+        }
+
+        function exportAndUpload() {
+            const json = exportJson();
+            document.getElementById('exportJson').value = json;
+            document.getElementById('exportSection').style.display = 'block';
+            document.getElementById('exportSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyJson() {
+            const textarea = document.getElementById('exportJson');
+            textarea.select();
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(textarea.value).then(() => {
+                    showToast('📋 已复制！现在去 GitHub 粘贴吧', 'success');
+                }).catch(() => {
+                    document.execCommand('copy');
+                    showToast('📋 已复制！请在 GitHub 中粘贴', 'success');
+                });
+            } else {
+                document.execCommand('copy');
+                showToast('📋 已复制！请在 GitHub 中粘贴', 'success');
+            }
+        }
+
+        // ============ Toast ============
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ============ 启动 ============
+        loadWorks();
+        if (works.length === 0) {
+            // 尝试加载现有的作品数据
+            fetch('data/works.json')
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.works) {
+                        works = data.works;
+                        saveWorks();
+                    }
+                })
+                .catch(() => {});
+        } else {
+            renderList();
+            document.getElementById('workCount').textContent = works.length;
+        }
+    </script>
+</body>
+</html>
