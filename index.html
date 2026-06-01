@@ -13,6 +13,46 @@
 
   <!-- 样式 -->
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-entry {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background: #8b5e3c;
+      color: #fff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 20px;
+      box-shadow: 0 4px 16px rgba(139,94,60,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .admin-entry:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 24px rgba(139,94,60,0.5);
+    }
+    .admin-entry .tooltip {
+      position: absolute;
+      right: 56px;
+      background: #2c2c2c;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .admin-entry:hover .tooltip {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
 
@@ -122,6 +162,12 @@
 
   <!-- ===== Script ===== -->
   <script src="js/script.js"></script>
+
+  <!-- ===== Admin Entry ===== -->
+  <a href="admin.html" class="admin-entry" title="管理作品" aria-label="管理作品">
+    <span class="tooltip">管理作品</span>
+    ⚙️
+  </a>
 
 </body>
 </html>
